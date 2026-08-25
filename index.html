@@ -1,80 +1,211 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Insaan Labs</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Insaan Labs. We build reports on your business data</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #FAFAF6;
+    --ink: #1B1B17;
+    --ink-soft: #5B5B51;
+    --accent: #2F4A3D;
+    --accent-soft: #E7ECE6;
+    --line: #DAD7CB;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  .wrap{
+    max-width:640px;
+    margin:0 auto;
+    padding:56px 24px 80px;
+  }
+  header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:64px;
+  }
+  .mark{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:14px;
+    letter-spacing:0.06em;
+    font-weight:600;
+  }
+  .mark span{color:var(--accent);}
+  nav a{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    text-decoration:none;
+    color:var(--ink-soft);
+    border-bottom:1px solid transparent;
+  }
+  nav a:hover, nav a:focus-visible{
+    border-bottom:1px solid var(--ink-soft);
+    outline:none;
+  }
+
+  h1{
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:600;
+    font-size:clamp(30px, 5.5vw, 44px);
+    line-height:1.15;
+    letter-spacing:-0.01em;
+    margin:0 0 20px;
+  }
+  .lede{
+    font-size:17px;
+    color:var(--ink-soft);
+    max-width:46ch;
+    margin:0 0 40px;
+  }
+
+  .receipt{
+    background:#fff;
+    border:1px solid var(--line);
+    padding:20px 22px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    max-width:340px;
+    margin:0 0 48px;
+    box-shadow:2px 3px 0 var(--accent-soft);
+  }
+  .receipt .rtitle{
+    letter-spacing:0.08em;
+    font-size:11px;
+    color:var(--ink-soft);
+    margin-bottom:12px;
+  }
+  .receipt .row{
+    display:flex;
+    justify-content:space-between;
+    padding:5px 0;
+    border-bottom:1px dashed var(--line);
+  }
+  .receipt .row:last-child{border-bottom:none;}
+  .receipt .row .val{color:var(--accent); font-weight:600;}
+
+  .cta{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:14px;
+    font-weight:600;
+    color:#fff;
+    background:var(--accent);
+    padding:13px 22px;
+    text-decoration:none;
+    border:1px solid var(--accent);
+    margin-bottom:8px;
+  }
+  .cta:hover, .cta:focus-visible{
+    background:#25392f;
+    outline:none;
+  }
+  .cta-note{
+    display:block;
+    font-size:13px;
+    color:var(--ink-soft);
+    margin-bottom:72px;
+  }
+
+  h2{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin:0 0 24px;
+    padding-bottom:12px;
+    border-bottom:1px solid var(--line);
+  }
+  .steps{
+    display:grid;
+    gap:22px;
+    margin-bottom:72px;
+  }
+  .step{
+    display:flex;
+    gap:16px;
+  }
+  .step .n{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--accent);
+    font-weight:600;
+    font-size:14px;
+    padding-top:2px;
+  }
+  .step p{margin:0; color:var(--ink-soft); font-size:15px;}
+  .step strong{color:var(--ink); font-weight:600;}
+
+  footer{
+    border-top:1px solid var(--line);
+    padding-top:28px;
+    font-size:14px;
+    color:var(--ink-soft);
+  }
+  footer .fmark{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--ink);
+    font-weight:600;
+    margin-bottom:6px;
+  }
+  footer a{text-decoration:underline; text-underline-offset:2px;}
+</style>
 </head>
 <body>
-  <main>
-    <h1>Insaan Labs</h1>
+  <div class="wrap">
+    <header>
+      <div class="mark">INSAAN<span>·</span>LABS</div>
+      <nav><a href="#contact">Contact</a></nav>
+    </header>
 
-    <svg class="illustration" viewBox="0 0 44 12" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <!-- Human face -->
-      <rect x="3" y="2" width="2" height="1" fill="#f0f4f8"/>
-      <rect x="2" y="3" width="4" height="1" fill="#f0f4f8"/>
-      <rect x="1" y="4" width="6" height="1" fill="#f0f4f8"/>
-      <rect x="1" y="5" width="1" height="1" fill="#f0f4f8"/>
-      <rect x="2" y="5" width="1" height="1" fill="#f0f4f8"/>
-      <rect x="4" y="5" width="1" height="1" fill="#f0f4f8"/>
-      <rect x="5" y="5" width="1" height="1" fill="#f0f4f8"/>
-      <rect x="6" y="5" width="1" height="1" fill="#f0f4f8"/>
-      <rect x="1" y="6" width="6" height="1" fill="#f0f4f8"/>
-      <rect x="2" y="7" width="4" height="1" fill="#f0f4f8"/>
-      <rect x="3" y="8" width="2" height="1" fill="#f0f4f8"/>
+    <main>
+      <h1>We build reports<br>on your business data.</h1>
+      <p class="lede">Send us an export from your POS. We turn it into one plain-English report on what's actually happening in your business — no dashboard, no login, no setup.</p>
 
-      <!-- Connection line -->
-      <rect x="8" y="5" width="27" height="1" fill="#f0f4f8" opacity="0.7"/>
+      <div class="receipt">
+        <div class="rtitle">SAMPLE REPORT — CORNER CAFE</div>
+        <div class="row"><span>Busiest hour</span><span class="val">Sat 11am</span></div>
+        <div class="row"><span>Quietest hour</span><span class="val">Tue 3pm</span></div>
+        <div class="row"><span>Weekend avg ticket</span><span class="val">+22%</span></div>
+        <div class="row"><span>Rainy-day sales</span><span class="val">−14%</span></div>
+      </div>
 
-      <!-- Robot antenna -->
-      <rect x="39" y="0" width="1" height="1" fill="#f0f4f8"/>
-      <rect x="38" y="1" width="3" height="1" fill="#f0f4f8"/>
+      <a class="cta" href="mailto:hello@insaanlabs.com?subject=Free%20report%20for%20my%20business">Get a free report</a>
+      <span class="cta-note">Takes 5 minutes on your end. No commitment.</span>
 
-      <!-- Robot head -->
-      <rect x="37" y="2" width="5" height="1" fill="#f0f4f8"/>
-      <rect x="36" y="3" width="7" height="1" fill="#f0f4f8"/>
-      <rect x="36" y="4" width="7" height="1" fill="#f0f4f8"/>
-      <rect x="36" y="5" width="1" height="1" fill="#f0f4f8"/>
-      <rect x="39" y="5" width="1" height="1" fill="#f0f4f8"/>
-      <rect x="42" y="5" width="1" height="1" fill="#f0f4f8"/>
-      <rect x="36" y="6" width="7" height="1" fill="#f0f4f8"/>
-      <rect x="36" y="7" width="7" height="1" fill="#f0f4f8"/>
-      <rect x="37" y="8" width="5" height="1" fill="#f0f4f8"/>
-      <rect x="36" y="4" width="1" height="2" fill="#f0f4f8"/>
-      <rect x="42" y="4" width="1" height="2" fill="#f0f4f8"/>
+      <h2>How it works</h2>
+      <div class="steps">
+        <div class="step">
+          <span class="n">01</span>
+          <p><strong>Export your sales data.</strong> Whatever you've got: a POS export, a spreadsheet, a CSV. No card numbers or customer info needed.</p>
+        </div>
+        <div class="step">
+          <span class="n">02</span>
+          <p><strong>We take a look.</strong> No pitch, no obligation, we're looking for patterns worth telling you about.</p>
+        </div>
+        <div class="step">
+          <span class="n">03</span>
+          <p><strong>You get a one-page report</strong> back within a week, free.</p>
+        </div>
+      </div>
+    </main>
 
-      <!-- Robot eyes + mouth -->
-      <rect x="37" y="4" width="2" height="2" fill="#4da6ff"/>
-      <rect x="40" y="4" width="2" height="2" fill="#4da6ff"/>
-      <rect x="38" y="6" width="3" height="1" fill="#0b1f3a"/>
-    </svg>
-
-    <p class="tagline">
-      We <em>build</em>, <em>create</em> and <em>research</em> at the intersection of humans and AI.
-    </p>
-
-    <p class="clients">
-      We work with <em>labs</em>, <em>YC startups</em>, and <em>independent creatives</em> on applied AI.
-    </p>
-
-    <p class="status">Currently in the making</p>
-
-    <section class="blog">
-      <h2 class="blog-label">Writing</h2>
-      <a class="article-card" href="article.html">
-        <span class="article-card-date">Jun 2025</span>
-        <span class="article-card-title">humans and AI</span>
-        <span class="article-card-excerpt">On building technology that serves humans.</span>
-      </a>
-    </section>
-  </main>
-
-  <footer>
-    <a href="https://instagram.com/insaanlabs" target="_blank" rel="noopener noreferrer">insaanlabs</a>
-  </footer>
+    <footer id="contact">
+      <div class="fmark">Insaan Labs</div>
+      <div><a href="mailto:osman.warsi@live.com">osman.warsi@live.com</a></div>
+      <div>Toronto, Ontario, Canada</div>
+    </footer>
+  </div>
 </body>
 </html>
