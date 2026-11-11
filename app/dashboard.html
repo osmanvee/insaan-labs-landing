@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Dashboard · Insaan Labs</title>
+<link rel="stylesheet" href="app.css?v=8">
+</head>
+<body>
+  <div class="wrap wide">
+    <header>
+      <a class="mark" href="../index.html">INSAAN<span>·</span>LABS</a>
+      <div class="header-account">
+        <span id="account-name"></span>
+        <button class="linkish" id="sign-out" type="button">Sign out</button>
+      </div>
+    </header>
+
+    <div class="layout" id="app" hidden>
+      <aside class="sidebar">
+        <a class="sidebar-back" id="all-dashboards" href="account.html" hidden>← All dashboards</a>
+        <div class="sidebar-biz" id="business-name"></div>
+        <div class="sync-box" id="sync-box" hidden></div>
+        <nav aria-label="Dashboard">
+          <a href="#overview" data-view="overview">Overview</a>
+          <a href="#monthly" data-view="monthly">Monthly</a>
+          <a href="#content" data-view="content">Content</a>
+          <a href="#audiences" data-view="audiences">Audiences</a>
+          <a href="#types" data-view="types">Content types</a>
+          <a href="#times" data-view="times">Posting times</a>
+          <a href="#brand" data-view="brand">Brand deck</a>
+          <a href="#competitors" data-view="competitors">Competitors</a>
+          <a href="#integrations" data-view="integrations">Integrations</a>
+        </nav>
+      </aside>
+
+      <main>
+        <section id="view-overview" hidden>
+          <h1>Overview <button class="info" type="button" id="overview-lede">?</button></h1>
+
+          <div class="followers summary" id="overview-stats"></div>
+
+          <h2 class="section">Views per post <button class="info" type="button" id="overview-chart-note">?</button></h2>
+          <div class="chart-card block" id="overview-chart"></div>
+
+          <div class="overview-grid">
+            <div>
+              <h2 class="section">Posts per month</h2>
+              <div id="overview-months"></div>
+            </div>
+            <div>
+              <h2 class="section">Content mix</h2>
+              <div id="overview-mix"></div>
+            </div>
+          </div>
+
+          <h2 class="section">Top posts</h2>
+          <ol class="top-videos" id="overview-top"></ol>
+        </section>
+
+        <section id="view-monthly" hidden>
+          <h1>Monthly</h1>
+
+          <nav class="month-nav" aria-label="Month">
+            <button class="linkish" id="prev-month" type="button"></button>
+            <div class="month-title" id="month-title" aria-live="polite"></div>
+            <button class="linkish" id="next-month" type="button"></button>
+          </nav>
+
+          <h2 class="section">Followers</h2>
+          <div class="followers" id="followers"></div>
+
+          <h2 class="section">Calendar <button class="info" type="button" id="calendar-legend">?</button></h2>
+          <div class="calendar block" id="calendar"></div>
+
+          <h2 class="section">Top videos</h2>
+          <ol class="top-videos" id="top-videos"></ol>
+
+          <h2 class="section">By content type</h2>
+          <div class="block" id="type-breakdown"></div>
+
+          <h2 class="section">Notes</h2>
+          <div class="notes" id="month-notes"></div>
+        </section>
+
+        <section id="view-content" hidden>
+          <h1>Content <button class="info" type="button" data-tip="Every piece of content, what it cost and how it's doing. Posts appear automatically; use Edit to add budget, crew and notes.">?</button></h1>
+
+          <div class="followers summary" id="content-summary"></div>
+
+          <div class="content-toolbar">
+            <button class="cta small" id="add-content" type="button" hidden>+ Add content</button>
+          </div>
+
+          <div class="content-list" id="content-list"></div>
+        </section>
+
+        <section id="view-audiences" hidden>
+          <h1>Audiences <button class="info" type="button" data-tip="Who you reach on each platform, and what you post there.">?</button></h1>
+          <div class="audiences" id="audiences"></div>
+        </section>
+
+        <section id="view-types" hidden>
+          <h1>Content types <button class="info" type="button" data-tip="The kinds of posts you make, and how each performs across every month logged.">?</button></h1>
+          <div class="type-cards" id="content-types"></div>
+        </section>
+
+        <section id="view-times" hidden>
+          <h1>Posting times <button class="info" type="button" id="times-lede">?</button></h1>
+
+          <div class="segmented" role="group" aria-label="Heatmap shows">
+            <button type="button" data-mode="posts" aria-pressed="true">Posts</button>
+            <button type="button" data-mode="views" aria-pressed="false">Views</button>
+          </div>
+          <button class="info" type="button" id="heatmap-legend">?</button>
+
+          <div class="chart-card block" id="heatmap"></div>
+
+          <h2 class="section">Findings <button class="info" type="button" id="findings-note">?</button></h2>
+          <ul class="findings block" id="time-findings"></ul>
+        </section>
+
+        <section id="view-integrations" hidden>
+          <h1>Integrations <button class="info" type="button" data-tip="Where this dashboard's numbers come from, and whether each connection is working.">?</button></h1>
+          <div class="type-cards" id="integrations"></div>
+        </section>
+
+        <section id="view-brand" hidden>
+          <h1>Brand deck <button class="info" type="button" data-tip="How the business looks and sounds. Use the arrows or your arrow keys to change slides.">?</button></h1>
+
+          <div class="slide" id="slide" aria-live="polite"></div>
+          <div class="deck-controls">
+            <button class="linkish" id="prev-slide" type="button">← Prev</button>
+            <span class="deck-count" id="slide-count"></span>
+            <button class="linkish" id="next-slide" type="button">Next →</button>
+          </div>
+          <p class="legend"><a id="deck-link" target="_blank" rel="noopener" hidden>Open the full deck</a></p>
+        </section>
+
+        <section id="view-competitors" hidden>
+          <h1>Competitors <button class="info" type="button" id="competitors-lede">?</button></h1>
+
+          <div class="table-scroll block">
+            <table class="compare">
+              <thead>
+                <tr id="competitors-head"></tr>
+              </thead>
+              <tbody id="competitors-body"></tbody>
+            </table>
+          </div>
+
+          <h2 class="section">Notes</h2>
+          <div class="notes" id="competitor-notes"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden>
+    <span id="toast-text"></span>
+    <button class="toast-close" id="toast-close" type="button" aria-label="Dismiss">×</button>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="client.js"></script>
+<script>
+  const PLATFORMS = {
+    instagram: { label: 'Instagram', short: 'IG' },
+    tiktok: { label: 'TikTok', short: 'TT' },
+    facebook: { label: 'Facebook', short: 'FB' },
+  };
+  const VIEWS = { overview: 'Overview', monthly: 'Monthly', content: 'Content', audiences: 'Audiences', types: 'Content types', times: 'Posting times', brand: 'Brand deck', competitors: 'Competitors', integrations: 'Integrations' };
+  const SYNC_STALE_HOURS = 24;
+  const STATUSES = {
+    draft: { label: 'In production', className: 'draft' },
+    ready: { label: 'Not published yet', className: 'ready' },
+    scheduled: { label: 'Scheduled', className: 'scheduled' },
+    live: { label: 'Live', className: 'live' },
+  };
+  const TOP_N = 5;
+  const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const DAYS_LONG = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const BLOCKS = ['12am', '3am', '6am', '9am', '12pm', '3pm', '6pm', '9pm'];
+
+  const OPTIONAL_VIEWS = ['brand', 'competitors'];
+  const CLIENT = new URLSearchParams(location.search).get('client') || '';
+
+  // Filled in once the dashboard has loaded from Supabase.
+  let data = null;
+  let ACTIVE = [];
+  let ENABLED = [];
+  let INTEGRATIONS = [];
+  let isAdmin = false;
+  let syncs = {};
+  let monthKeys = [];
+  let currentMonth = 0;
+  let currentSlide = 0;
+  let contentEdits = { overrides: {}, added: [] };
+  let editingId = null;
+
+  const num = new Intl.NumberFormat('en-CA');
+  const compact = new Intl.NumberFormat('en-CA', { notation: 'compact', maximumFractionDigits: 0 });
+  const compact2 = new Intl.NumberFormat('en-CA', { notation: 'compact', maximumFractionDigits: 1 });
+  const price = new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD', maximumFractionDigits: 2, minimumFractionDigits: 0 });
+  const cents = new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD' });
+
+  (async function () {
+    const I = window.INSAAN;
+    for (const el of document.querySelectorAll('.info[data-tip]')) setTip(el, el.dataset.tip);
+
+    document.getElementById('sign-out').addEventListener('click', async function () {
+      await I.signOut();
+      location.replace('index.html');
+    });
+
+    if (location.hash.includes('error=')) return location.replace('index.html?link=expired');
+    const user = await I.currentUser();
+    if (!user) return location.replace('index.html');
+    if (!user.account || !CLIENT) return location.replace('account.html');
+
+    // Row-level security returns nothing if this account isn't a member of the client.
+    const [clientRes, editsRes, syncsRes, membershipsRes] = await Promise.all([
+      I.sb.from('clients').select('id, name, integrations, data').eq('id', CLIENT).maybeSingle(),
+      I.sb.from('content_edits').select('edits').eq('client_id', CLIENT).maybeSingle(),
+      I.sb.from('syncs').select('platform, record').eq('client_id', CLIENT),
+      I.sb.from('memberships').select('client_id'),
+    ]);
+    if (!clientRes.data) return location.replace('account.html');
+
+    data = clientRes.data.data || {};
+    data.business = Object.assign({ name: clientRes.data.name }, data.business);
+    data.months = data.months || {};
+    isAdmin = user.account.isAdmin;
+    INTEGRATIONS = clientRes.data.integrations || [];
+    ACTIVE = Object.keys(PLATFORMS).filter(function (id) { return !data.platforms || data.platforms[id]; });
+    ENABLED = Object.keys(VIEWS).filter(function (id) { return OPTIONAL_VIEWS.indexOf(id) < 0 || data[id]; });
+    const saved = editsRes.data && editsRes.data.edits;
+    contentEdits = { overrides: (saved && saved.overrides) || {}, added: (saved && saved.added) || [] };
+    for (const row of syncsRes.data || []) syncs[row.platform] = row.record;
+
+    for (const platform in syncs) applySync(syncs[platform]);
+    monthKeys = Object.keys(data.months).sort();
+    currentMonth = monthKeys.length - 1;
+
+    document.getElementById('account-name').textContent = user.account.name;
+    document.getElementById('toast-close').addEventListener('click', function () { document.getElementById('toast').hidden = true; });
+    document.getElementById('all-dashboards').hidden = (membershipsRes.data || []).length < 2 && !isAdmin;
+    document.getElementById('add-content').hidden = !isAdmin;
+
+    document.getElementById('business-name').textContent = data.business.name;
+    for (const link of document.querySelectorAll('.sidebar nav a')) link.hidden = ENABLED.indexOf(link.dataset.view) < 0;
+    setTip('calendar-legend',
+      ACTIVE.map(function (id) { return PLATFORMS[id].short + ' ' + PLATFORMS[id].label; }).join(' · ') +
+      '. Dark = one of the month\'s top ' + TOP_N + ' videos.');
+
+    document.getElementById('prev-month').addEventListener('click', function () { showMonth(currentMonth - 1); });
+    document.getElementById('next-month').addEventListener('click', function () { showMonth(currentMonth + 1); });
+    document.getElementById('prev-slide').addEventListener('click', function () { showSlide(currentSlide - 1); });
+    document.getElementById('next-slide').addEventListener('click', function () { showSlide(currentSlide + 1); });
+    document.addEventListener('keydown', function (e) {
+      if (document.getElementById('view-brand').hidden) return;
+      if (e.key === 'ArrowLeft') showSlide(currentSlide - 1);
+      if (e.key === 'ArrowRight') showSlide(currentSlide + 1);
+    });
+
+    renderOverview();
+    showMonth(currentMonth);
+    renderAudiences();
+    renderContentTypes();
+    setUpHeatmap();
+    setUpContentEditing();
+    renderContent();
+    if (data.brand) renderBrand();
+    if (data.competitors) renderCompetitors();
+
+    renderSyncBox();
+    renderIntegrations();
+
+    window.addEventListener('hashchange', route);
+    route();
+    document.getElementById('app').hidden = false;
+
+    const pending = sessionStorage.getItem('insaan-toast');
+    if (pending) {
+      sessionStorage.removeItem('insaan-toast');
+      const t = JSON.parse(pending);
+      showToast(t.text, t.kind);
+    }
+  })();
+
+  function route() {
+    const hash = location.hash.slice(1);
+    const view = ENABLED.indexOf(hash) >= 0 ? hash : 'overview';
+
+    for (const id in VIEWS) document.getElementById('view-' + id).hidden = id !== view;
+    for (const link of document.querySelectorAll('.sidebar nav a')) {
+      if (link.dataset.view === view) link.setAttribute('aria-current', 'page');
+      else link.removeAttribute('aria-current');
+    }
+    document.title = VIEWS[view] + ' · ' + data.business.name + ' · Insaan Labs';
+  }
+
+  /* Overview */
+
+  function renderOverview() {
+    const videos = allVideos().slice().sort(function (a, b) { return a.date.localeCompare(b.date); });
+    const withViews = videos.filter(function (v) { return v.views != null; });
+    const totalViews = withViews.reduce(function (sum, v) { return sum + v.views; }, 0);
+    const typical = median(withViews.map(function (v) { return v.views; }));
+    const followers = ACTIVE.reduce(function (sum, id) { return sum + (latestFollowers(id) || 0); }, 0);
+    const anyFollowers = ACTIVE.some(function (id) { return latestFollowers(id) != null; });
+
+    const range = monthKeys.length
+      ? monthLabel(monthKeys[0], 'long') + (monthKeys.length > 1 ? ' to ' + monthLabel(monthKeys[monthKeys.length - 1], 'long') : '')
+      : '';
+    setTip('overview-lede',
+      'The big picture across every month logged' + (range ? ': ' + range : '') +
+      ', on ' + ACTIVE.map(function (id) { return PLATFORMS[id].label; }).join(', ') + '.');
+
+    const stats = document.getElementById('overview-stats');
+    stats.replaceChildren();
+    for (const [label, value, sub] of [
+      ['Followers', anyFollowers ? num.format(followers) : '—', ACTIVE.length > 1 ? 'Latest follower counts added up across ' + ACTIVE.length + ' platforms.' : 'Latest follower count.'],
+      ['Posts', String(videos.length), 'Posts logged so far.'],
+      ['Total views', withViews.length ? compact2.format(totalViews) : '—', 'Views across all logged posts.'],
+      ['Typical post', typical == null ? '—' : num.format(typical), 'Median views per post, so one viral post doesn\'t skew it.'],
+    ]) {
+      stats.append(statCard(label, value, sub));
+    }
+
+    renderViewsChart(withViews, typical);
+
+    const perMonth = monthKeys.map(function (key) {
+      return { label: monthLabel(key, 'long'), value: (data.months[key].videos || []).length };
+    });
+    const months = document.getElementById('overview-months');
+    months.replaceChildren(perMonth.length ? bars(perMonth, null, function (r) { return plural(r.value, 'post'); }) : div('empty', 'No months logged yet.'));
+
+    const mix = groupByType(videos)
+      .sort(function (a, b) { return b.posts - a.posts; })
+      .map(function (g) { return { label: g.label, value: g.posts }; });
+    const mixEl = document.getElementById('overview-mix');
+    mixEl.replaceChildren(mix.length ? bars(mix) : div('empty', 'No posts logged yet.'));
+
+    renderTopVideos(topByViews(videos, 3), document.getElementById('overview-top'), 'No posts logged yet.');
+  }
+
+  // Posts far above the typical one would flatten every other bar, so they're drawn
+  // full height with a striped bar and their real number on top.
+  function renderViewsChart(videos, typical) {
+    const el = document.getElementById('overview-chart');
+    el.replaceChildren();
+    setTip('overview-chart-note', 'One bar per post, oldest on the left. Hover a bar for details.');
+
+    if (videos.length === 0) {
+      el.append(div('empty', 'No posts with view counts yet.'));
+      return;
+    }
+
+    const isOutlier = function (v) { return typical && videos.length > 3 && v.views > typical * 8; };
+    const normal = videos.filter(function (v) { return !isOutlier(v); });
+    const scaleMax = Math.max.apply(null, (normal.length ? normal : videos).map(function (v) { return v.views; })) || 1;
+    const best = topByViews(videos, 1)[0];
+
+    const chart = div('colchart');
+    const axis = div('colchart-axis');
+    let lastMonth = '';
+
+    for (const v of videos) {
+      const outlier = isOutlier(v);
+      const col = div('col' + (v === best ? ' best' : '') + (outlier ? ' outlier' : ''));
+      col.title = v.title + ' · ' + postedAt(v) + ' · ' + num.format(v.views) + ' views';
+
+      const bar = div('col-bar');
+      bar.style.height = (outlier ? 100 : Math.max(2, v.views / scaleMax * 100)) + '%';
+      col.append(div('col-value', compact2.format(v.views)), bar);
+      chart.append(col);
+
+      const month = v.date.slice(0, 7);
+      axis.append(div('col-label', month !== lastMonth ? monthLabel(month, 'short') : ''));
+      lastMonth = month;
+    }
+
+    el.append(chart, axis);
+    if (videos.some(isOutlier)) {
+      setTip('overview-chart-note', 'One bar per post, oldest on the left. Striped bars are far above your typical post and aren\'t drawn to scale. Hover a bar for details.');
+    }
+  }
+
+  function median(values) {
+    if (values.length === 0) return null;
+    const sorted = values.slice().sort(function (a, b) { return a - b; });
+    const mid = Math.floor(sorted.length / 2);
+    return sorted.length % 2 ? sorted[mid] : Math.round((sorted[mid - 1] + sorted[mid]) / 2);
+  }
+
+  /* Monthly */
+
+  function showMonth(index) {
+    if (index < 0 || index >= monthKeys.length) return;
+    currentMonth = index;
+
+    const key = monthKeys[index];
+    const prevKey = monthKeys[index - 1];
+    const nextKey = monthKeys[index + 1];
+    const month = data.months[key];
+    const videos = month.videos || [];
+    const top = topByViews(videos, TOP_N);
+
+    document.getElementById('month-title').textContent = monthLabel(key, 'long');
+    setNavButton('prev-month', prevKey, '← ');
+    setNavButton('next-month', nextKey, '', ' →');
+
+    renderFollowers(month, prevKey && data.months[prevKey].followers, prevKey);
+    renderCalendar(key, videos, new Set(top));
+    renderTopVideos(top);
+    renderTypeTable(document.getElementById('type-breakdown'), videos, 'No posts logged for this month yet.');
+    renderNotes(document.getElementById('month-notes'), month.notes || [], 'No notes for this month yet.');
+  }
+
+  function setNavButton(id, key, before, after) {
+    const button = document.getElementById(id);
+    button.disabled = !key;
+    button.textContent = key ? (before || '') + monthLabel(key, 'short') + (after || '') : '';
+  }
+
+  function renderFollowers(month, prevFollowers, prevKey) {
+    const el = document.getElementById('followers');
+    el.replaceChildren();
+    const followers = month.followers || {};
+    const totalLikes = month.totalLikes || {};
+
+    for (const id of ACTIVE) {
+      const count = followers[id];
+      const card = div('stat');
+      card.append(div('stat-label', PLATFORMS[id].label));
+      card.append(div('stat-value', count == null ? '—' : num.format(count)));
+      if (totalLikes[id] != null) card.append(div('stat-change', num.format(totalLikes[id]) + ' total likes'));
+
+      const prev = prevFollowers && prevFollowers[id];
+      if (count != null && prev != null) {
+        const diff = count - prev;
+        const change = div('stat-change ' + (diff > 0 ? 'up' : diff < 0 ? 'down' : ''));
+        change.textContent = (diff > 0 ? '+' : diff < 0 ? '−' : '±') + num.format(Math.abs(diff)) + ' since ' + monthLabel(prevKey, 'short');
+        card.append(change);
+      }
+      el.append(card);
+    }
+  }
+
+  function renderCalendar(key, videos, topSet) {
+    const el = document.getElementById('calendar');
+    el.replaceChildren();
+
+    for (const name of WEEKDAYS) el.append(div('weekday', name));
+
+    const [year, month] = key.split('-').map(Number);
+    const offset = (new Date(year, month - 1, 1).getDay() + 6) % 7;
+    const daysInMonth = new Date(year, month, 0).getDate();
+
+    const byDay = {};
+    for (const v of videos) {
+      const day = Number(v.date.split('-')[2]);
+      (byDay[day] = byDay[day] || []).push(v);
+    }
+
+    for (let i = 0; i < offset; i++) el.append(div('day blank'));
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const cell = div('day');
+      cell.append(div('day-num', String(day)));
+
+      for (const v of byDay[day] || []) {
+        const chip = document.createElement(v.url ? 'a' : 'span');
+        chip.className = 'chip' + (topSet.has(v) ? ' top' : '');
+        if (v.url) { chip.href = v.url; chip.target = '_blank'; chip.rel = 'noopener'; }
+        chip.title = PLATFORMS[v.platform].label + ' · ' + typeLabel(v.type) + (v.time ? ' · ' + formatTime(v.time) : '') + ': ' + v.title +
+          (v.views != null ? ' (' + num.format(v.views) + ' views)' : '');
+
+        const p = document.createElement('span');
+        p.textContent = PLATFORMS[v.platform].short;
+        chip.append(p);
+        if (v.views != null) {
+          const views = document.createElement('span');
+          views.className = 'chip-views';
+          views.textContent = compact.format(v.views);
+          chip.append(views);
+        }
+        cell.append(chip);
+      }
+      el.append(cell);
+    }
+
+    const trailing = (7 - ((offset + daysInMonth) % 7)) % 7;
+    for (let i = 0; i < trailing; i++) el.append(div('day blank'));
+  }
+
+  function renderTopVideos(top, el, emptyText) {
+    el = el || document.getElementById('top-videos');
+    el.replaceChildren();
+
+    if (top.length === 0) {
+      el.append(div('empty', emptyText || 'No videos logged for this month.'));
+      return;
+    }
+
+    for (const v of top) {
+      const li = document.createElement('li');
+
+      const info = div('video-info');
+      const title = document.createElement(v.url ? 'a' : 'span');
+      title.className = 'video-title';
+      title.textContent = v.title;
+      if (v.url) { title.href = v.url; title.target = '_blank'; title.rel = 'noopener'; }
+      info.append(title, div('video-meta', PLATFORMS[v.platform].label + ' · ' + typeLabel(v.type) + ' · ' + postedAt(v)));
+      const engagement = [['reach', 'reached'], ['likes', 'likes'], ['comments', 'comments'], ['saves', 'saves'], ['shares', 'shares']]
+        .filter(function (pair) { return v[pair[0]] != null; })
+        .map(function (pair) { return num.format(v[pair[0]]) + ' ' + pair[1]; });
+      if (engagement.length) info.append(div('video-meta', engagement.join(' · ')));
+
+      li.append(info, div('video-views', num.format(v.views) + ' views'));
+      el.append(li);
+    }
+  }
+
+  function renderTypeTable(el, videos, emptyText) {
+    el.replaceChildren();
+    const groups = groupByType(videos);
+
+    if (groups.length === 0) {
+      el.append(div('empty', emptyText));
+      return;
+    }
+
+    const wrap = div('table-scroll');
+    const table = document.createElement('table');
+    table.className = 'compare';
+    const head = document.createElement('tr');
+    for (const [label, cls] of [['Type'], ['Posts', 'num'], ['Total views', 'num'], ['Avg views', 'num']]) {
+      const th = document.createElement('th');
+      th.scope = 'col';
+      th.textContent = label;
+      if (cls) th.className = cls;
+      head.append(th);
+    }
+    const thead = document.createElement('thead');
+    thead.append(head);
+    const tbody = document.createElement('tbody');
+
+    for (const g of groups) {
+      const tr = document.createElement('tr');
+      tr.append(
+        cell(g.label),
+        cell(String(g.posts), 'num'),
+        cell(g.avg == null ? '—' : num.format(g.views), 'num'),
+        cell(g.avg == null ? '—' : num.format(g.avg), 'num')
+      );
+      tbody.append(tr);
+    }
+
+    table.append(thead, tbody);
+    wrap.append(table);
+    el.append(wrap);
+  }
+
+  /* Content */
+
+  // Pieces come from three places: `content` in the client's data, pieces added on the Content
+  // page, and one automatic piece per post that isn't linked to either. Edits (budget, status,
+  // crew, notes) live in the content_edits table as overrides keyed by piece id.
+  function getPieces() {
+    const videos = allVideos();
+    const claimed = new Set();
+    const pieces = [];
+
+    const base = (data.content || []).map(function (c) { return Object.assign({}, c, { source: 'file' }); })
+      .concat(contentEdits.added.map(function (c) { return Object.assign({}, c, { source: 'local' }); }));
+
+    for (const c of base) {
+      c.posts = videos.filter(function (v) {
+        return (c.id && v.content === c.id) || (v.url && (c.urls || []).indexOf(v.url) >= 0);
+      });
+      c.posts.forEach(function (v) { claimed.add(v); });
+      pieces.push(withOverrides(c));
+    }
+
+    for (const v of videos) {
+      if (claimed.has(v)) continue;
+      pieces.push(withOverrides({
+        id: 'post:' + (v.url || v.date + ' ' + v.title),
+        title: v.title,
+        type: v.type,
+        status: 'live',
+        urls: v.url ? [v.url] : [],
+        posts: [v],
+        notes: [],
+        source: 'post',
+      }));
+    }
+
+    return pieces.sort(function (a, b) {
+      return (a.status === 'live') - (b.status === 'live') || pieceDate(b).localeCompare(pieceDate(a));
+    });
+  }
+
+  function withOverrides(c) {
+    const o = contentEdits.overrides[c.id];
+    c.localNotes = [];
+    if (!o) return c;
+    for (const key of ['title', 'type', 'status', 'cost', 'madeBy']) {
+      if (o[key] !== undefined) c[key] = o[key];
+    }
+    c.localNotes = o.notes || [];
+    c.edited = true;
+    return c;
+  }
+
+  function pieceDate(c) {
+    return (c.posts || []).reduce(function (latest, v) { return v.date > latest ? v.date : latest; }, c.delivered || c.createdAt || '');
+  }
+
+  // Saves the whole edits document for this client. Admin-only, enforced by the database.
+  async function saveEdits() {
+    const { error } = await window.INSAAN.sb.from('content_edits').upsert({
+      client_id: CLIENT,
+      edits: contentEdits,
+      updated_at: new Date().toISOString(),
+      updated_by: document.getElementById('account-name').textContent,
+    });
+    if (error) showToast('Couldn\'t save: ' + error.message, 'error');
+    else showToast('Saved.', 'success');
+  }
+
+  function setUpContentEditing() {
+    document.getElementById('add-content').addEventListener('click', function () {
+      const id = 'local-' + Date.now();
+      contentEdits.added.push({
+        id: id,
+        title: 'New piece',
+        type: Object.keys(data.contentTypes || {})[0] || '',
+        status: 'draft',
+        cost: null,
+        madeBy: '',
+        createdAt: today(),
+        notes: [],
+      });
+      saveEdits();
+      editingId = id;
+      renderContent();
+      const card = document.querySelector('[data-piece="' + CSS.escape(id) + '"]');
+      if (card) card.scrollIntoView({ block: 'center' });
+    });
+  }
+
+  function renderContent() {
+    const pieces = getPieces();
+
+    const spent = pieces.reduce(function (sum, c) { return sum + (c.cost || 0); }, 0);
+    const live = pieces.filter(function (c) { return c.status === 'live'; }).length;
+
+    const summary = document.getElementById('content-summary');
+    summary.replaceChildren();
+    for (const [label, value, sub] of [
+      ['Total spent', price.format(spent), 'Budget across all content, in CAD.'],
+      ['Pieces', String(pieces.length), 'Every post and planned piece.'],
+      ['Live', String(live), 'Published pieces.'],
+      ['Not live yet', String(pieces.length - live), 'In production, finished but not posted, or scheduled.'],
+    ]) {
+      summary.append(statCard(label, value, sub));
+    }
+
+    const list = document.getElementById('content-list');
+    list.replaceChildren();
+
+    if (pieces.length === 0) {
+      list.append(div('empty', 'No content yet. Posts appear here automatically, or use Add content.'));
+      return;
+    }
+
+    for (const c of pieces) list.append(c.id === editingId ? pieceForm(c) : pieceCard(c));
+  }
+
+  function pieceCard(c) {
+    const status = STATUSES[c.status] || { label: c.status || 'No status', className: 'draft' };
+    const withViews = c.posts.filter(function (v) { return v.views != null; });
+    const views = withViews.reduce(function (sum, v) { return sum + v.views; }, 0);
+
+    const card = div('audience');
+    card.dataset.piece = c.id;
+    const top = div('audience-top');
+    const right = div('piece-actions');
+    const edit = document.createElement('button');
+    edit.type = 'button';
+    edit.className = 'linkish';
+    edit.textContent = 'Edit';
+    edit.addEventListener('click', function () { editingId = c.id; renderContent(); });
+    right.append(div('role-tag status-' + status.className, status.label));
+    if (isAdmin) right.append(edit);
+    top.append(div('type-name', c.title), right);
+    card.append(top);
+
+    const meta = [typeLabel(c.type)];
+    if (c.madeBy) meta.push('Made by ' + c.madeBy);
+    if (c.delivered) meta.push('Delivered ' + formatDate(c.delivered));
+    if (c.scheduled && c.status === 'scheduled') meta.push('Scheduled for ' + formatDate(c.scheduled));
+    card.append(div('video-meta', meta.join(' · ')));
+
+    const stats = div('type-stats three');
+    for (const [value, label] of [
+      [c.cost == null ? '—' : c.cost === 0 ? 'In-house' : price.format(c.cost), 'budget'],
+      [withViews.length ? num.format(views) : '—', 'views'],
+      [c.cost && views > 0 ? cents.format(c.cost / views * 1000) : '—', 'per 1,000 views'],
+    ]) {
+      const s = div('type-stat');
+      s.append(div('stat-value', value), div('stat-change', label));
+      stats.append(s);
+    }
+    card.append(stats);
+
+    card.append(div('audience-label', 'Where it\'s posted'));
+    if (c.posts.length === 0) {
+      card.append(div('audience-text muted', c.status === 'live' ? 'Live, but no post logged yet.' : 'Not published yet.'));
+    } else {
+      for (const v of c.posts) {
+        const line = div('audience-text');
+        const name = document.createElement(v.url ? 'a' : 'span');
+        name.textContent = PLATFORMS[v.platform].label;
+        if (v.url) { name.href = v.url; name.target = '_blank'; name.rel = 'noopener'; }
+        line.append(name, document.createTextNode(' · ' + postedAt(v) + (v.views != null ? ' · ' + num.format(v.views) + ' views' : '')));
+        card.append(line);
+      }
+    }
+
+    const notes = (c.notes || []).concat(c.localNotes);
+    if (notes.length) {
+      card.append(div('audience-label', 'Notes'));
+      const el = div('notes compact');
+      renderNotes(el, notes, '');
+      card.append(el);
+    }
+
+    return card;
+  }
+
+  function pieceForm(c) {
+    const card = div('audience editing');
+    card.dataset.piece = c.id;
+    card.append(div('type-name', c.source === 'local' && c.title === 'New piece' ? 'New piece' : 'Edit: ' + c.title));
+
+    const form = document.createElement('form');
+    form.className = 'edit-form';
+
+    const typeOptions = [['', 'Uncategorized']].concat(Object.keys(data.contentTypes || {}).map(function (k) { return [k, data.contentTypes[k].label]; }));
+    const statusOptions = Object.keys(STATUSES).map(function (k) { return [k, STATUSES[k].label]; });
+
+    form.append(
+      field('Title', input('f-title', 'text', c.title)),
+      row(
+        field('Content type', select('f-type', typeOptions, typeKey(c.type))),
+        field('Status', select('f-status', statusOptions, STATUSES[c.status] ? c.status : 'draft'))
+      ),
+      row(
+        field('Budget (CAD)', input('f-cost', 'number', c.cost == null ? '' : c.cost, 'e.g. 450')),
+        field('Made by / crew', input('f-madeBy', 'text', c.madeBy || '', 'e.g. Prod @osmanwarsi, colour @krystiansosaa'))
+      )
+    );
+
+    if (c.notes && c.notes.length) {
+      form.append(div('audience-label', 'Earlier notes'));
+      const el = div('notes compact');
+      renderNotes(el, c.notes, '');
+      form.append(el);
+    }
+
+    if (c.localNotes.length) {
+      form.append(div('audience-label', 'Notes added here'));
+      c.localNotes.forEach(function (n, i) {
+        const line = div('local-note');
+        line.append(div('audience-text', formatDate(n.date) + ': ' + n.text));
+        const remove = button('Remove', 'linkish danger', function () {
+          contentEdits.overrides[c.id].notes.splice(i, 1);
+          saveEdits();
+          renderContent();
+        });
+        line.append(remove);
+        form.append(line);
+      });
+    }
+
+    const note = document.createElement('textarea');
+    note.name = 'f-note';
+    note.rows = 3;
+    note.placeholder = 'Add a note (optional)';
+    form.append(field('New note', note));
+
+    const actions = div('btn-row');
+    const save = document.createElement('button');
+    save.type = 'submit';
+    save.className = 'cta small';
+    save.textContent = 'Save';
+    actions.append(save, button('Cancel', 'linkish', function () { editingId = null; renderContent(); }));
+    if (c.source === 'local') {
+      actions.append(button('Delete piece', 'linkish danger', function () {
+        if (!confirm('Delete "' + c.title + '"?')) return;
+        contentEdits.added = contentEdits.added.filter(function (a) { return a.id !== c.id; });
+        delete contentEdits.overrides[c.id];
+        saveEdits();
+        editingId = null;
+        renderContent();
+        renderContentTypes();
+      }));
+    }
+    form.append(actions);
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const f = form.elements;
+      const o = contentEdits.overrides[c.id] || { notes: [] };
+      o.title = f['f-title'].value.trim() || c.title;
+      o.type = f['f-type'].value;
+      o.status = f['f-status'].value;
+      o.cost = f['f-cost'].value === '' ? null : Math.max(0, Number(f['f-cost'].value));
+      o.madeBy = f['f-madeBy'].value.trim();
+      const text = f['f-note'].value.trim();
+      if (text) o.notes = (o.notes || []).concat([{ author: 'Insaan Labs', date: today(), text: text }]);
+      contentEdits.overrides[c.id] = o;
+      saveEdits();
+      editingId = null;
+      renderContent();
+      renderContentTypes();
+    });
+
+    card.append(form);
+    return card;
+  }
+
+  function field(labelText, control) {
+    const wrap = div('field');
+    const label = document.createElement('label');
+    label.textContent = labelText;
+    control.id = control.id || 'field-' + control.name;
+    label.htmlFor = control.id;
+    wrap.append(label, control);
+    return wrap;
+  }
+
+  function row() {
+    const el = div('field-row');
+    el.append.apply(el, arguments);
+    return el;
+  }
+
+  function input(name, type, value, placeholder) {
+    const el = document.createElement('input');
+    el.name = name;
+    el.type = type;
+    el.value = value;
+    if (type === 'number') { el.min = '0'; el.step = 'any'; }
+    if (placeholder) el.placeholder = placeholder;
+    return el;
+  }
+
+  function select(name, options, value) {
+    const el = document.createElement('select');
+    el.name = name;
+    for (const [v, label] of options) {
+      const opt = document.createElement('option');
+      opt.value = v;
+      opt.textContent = label;
+      el.append(opt);
+    }
+    el.value = value;
+    return el;
+  }
+
+  function button(text, className, onClick) {
+    const el = document.createElement('button');
+    el.type = 'button';
+    el.className = className;
+    el.textContent = text;
+    el.addEventListener('click', onClick);
+    return el;
+  }
+
+  function today() {
+    return new Date().toLocaleDateString('en-CA');
+  }
+
+  /* Audiences */
+
+  function renderAudiences() {
+    const el = document.getElementById('audiences');
+    el.replaceChildren();
+    const videos = allVideos();
+
+    for (const id of ACTIVE) {
+      const p = (data.platforms || {})[id] || {};
+      const card = div('audience');
+
+      const top = div('audience-top');
+      top.append(div('stat-label', PLATFORMS[id].label));
+      if (p.role) top.append(div('role-tag', p.role));
+      card.append(top);
+
+      if (p.handle) {
+        const handle = document.createElement(p.url ? 'a' : 'div');
+        handle.className = 'audience-handle';
+        handle.textContent = p.handle;
+        if (p.url) { handle.href = p.url; handle.target = '_blank'; handle.rel = 'noopener'; }
+        card.append(handle);
+      }
+
+      const count = latestFollowers(id);
+      card.append(div('stat-value', count == null ? '—' : num.format(count)));
+      card.append(div('stat-change', count == null ? 'Followers not recorded yet' : 'followers'));
+
+      if (p.ages) card.append(div('audience-label', 'Ages'), div('audience-text', p.ages));
+      if (p.audience) card.append(div('audience-label', "Who's here"), div('audience-text', p.audience));
+
+      const demo = p.demographics || {};
+      for (const [key, label] of [['age', 'Age'], ['gender', 'Gender'], ['cities', 'Top cities'], ['countries', 'Top countries']]) {
+        if (demo[key] && demo[key].length) card.append(div('audience-label', label), bars(demo[key], (demo.totals || {})[key]));
+      }
+
+      card.append(div('audience-label', 'Content mix'));
+      const groups = groupByType(videos.filter(function (v) { return v.platform === id; }));
+      if (groups.length === 0) {
+        card.append(div('audience-text muted', 'No posts logged yet.'));
+      } else {
+        for (const g of groups) {
+          card.append(div('audience-text', g.label + ': ' + plural(g.posts, 'post') +
+            (g.avg == null ? '' : ', ' + compact.format(g.avg) + ' avg views')));
+        }
+      }
+      el.append(card);
+    }
+  }
+
+  /* Content types */
+
+  function renderContentTypes() {
+    const el = document.getElementById('content-types');
+    el.replaceChildren();
+    const videos = allVideos();
+    const types = Object.assign({}, data.contentTypes || {});
+    if (videos.some(function (v) { return typeKey(v.type) === ''; })) {
+      types[''] = { label: 'Uncategorized', description: 'Posts with no type, or a type not listed in data.js.' };
+    }
+
+    for (const key in types) {
+      const t = types[key];
+      const posts = videos.filter(function (v) { return typeKey(v.type) === key; });
+      const group = groupByType(posts)[0];
+      const card = div('audience');
+
+      const top = div('audience-top');
+      const name = div('type-name', t.label);
+      const about = [t.description, t.bestOn ? 'Works best on ' + t.bestOn + '.' : ''].filter(Boolean).join(' ');
+      if (about) name.append(tipIcon(about));
+      top.append(name, div('role-tag', plural(posts.length, 'post')));
+      card.append(top);
+
+      const stats = div('type-stats');
+      const avg = div('type-stat');
+      avg.append(div('stat-value', group && group.avg != null ? num.format(group.avg) : '—'), div('stat-change', 'avg views'));
+      const total = div('type-stat');
+      total.append(div('stat-value', group && group.avg != null ? num.format(group.views) : '—'), div('stat-change', 'total views'));
+      stats.append(avg, total);
+      card.append(stats);
+
+      const paid = getPieces().filter(function (c) { return typeKey(c.type) === key && c.cost > 0; });
+      const spent = paid.reduce(function (sum, c) { return sum + c.cost; }, 0);
+      if (spent > 0) card.append(div('audience-label', 'Spent'), div('audience-text', price.format(spent) + ' on ' + plural(paid.length, 'piece')));
+
+      card.append(div('audience-label', 'Posted on'));
+      const byPlatform = [];
+      for (const id of ACTIVE) {
+        const n = posts.filter(function (v) { return v.platform === id; }).length;
+        if (n) byPlatform.push(PLATFORMS[id].label + ' ' + n);
+      }
+      card.append(div('audience-text' + (byPlatform.length ? '' : ' muted'), byPlatform.length ? byPlatform.join(' · ') : 'Nothing logged yet.'));
+
+      const best = topByViews(posts, 1)[0];
+      if (best) {
+        card.append(div('audience-label', 'Best post'));
+        const title = document.createElement(best.url ? 'a' : 'div');
+        title.className = 'audience-text';
+        title.textContent = best.title;
+        if (best.url) { title.href = best.url; title.target = '_blank'; title.rel = 'noopener'; }
+        card.append(title, div('video-meta', PLATFORMS[best.platform].label + ' · ' + num.format(best.views) + ' views · ' + postedAt(best)));
+      }
+
+      el.append(card);
+    }
+  }
+
+  function topByViews(videos, n) {
+    return videos
+      .filter(function (v) { return v.views != null; })
+      .sort(function (a, b) { return b.views - a.views; })
+      .slice(0, n);
+  }
+
+  function plural(n, word) {
+    return n + ' ' + word + (n === 1 ? '' : 's');
+  }
+
+  function bars(rows, total, formatValue) {
+    total = total || rows.reduce(function (sum, r) { return sum + r.value; }, 0);
+    formatValue = formatValue || function (r) { return (total ? Math.round(r.value / total * 100) : 0) + '%'; };
+    const max = Math.max.apply(null, rows.map(function (r) { return r.value; }));
+    const el = div('bars');
+    for (const r of rows) {
+      const row = div('bar-row');
+      const track = div('bar-track');
+      const fill = div('bar-fill');
+      fill.style.width = (max ? r.value / max * 100 : 0) + '%';
+      track.append(fill);
+      row.append(div('bar-label', r.label), track, div('bar-pct', formatValue(r)));
+      row.title = num.format(r.value);
+      el.append(row);
+    }
+    return el;
+  }
+
+  function allVideos() {
+    return monthKeys.reduce(function (list, key) { return list.concat(data.months[key].videos || []); }, []);
+  }
+
+  function latestFollowers(id) {
+    for (let i = monthKeys.length - 1; i >= 0; i--) {
+      const f = data.months[monthKeys[i]].followers || {};
+      if (f[id] != null) return f[id];
+    }
+    return null;
+  }
+
+  // avg is over posts that have a view count (photos often don't); null if none do.
+  function groupByType(videos) {
+    const groups = {};
+    for (const v of videos) {
+      const key = typeKey(v.type);
+      const g = groups[key] = groups[key] || { key: key, label: typeLabel(key), posts: 0, views: 0, withViews: 0 };
+      g.posts += 1;
+      if (v.views != null) { g.views += v.views; g.withViews += 1; }
+    }
+    return Object.values(groups)
+      .map(function (g) { g.avg = g.withViews ? Math.round(g.views / g.withViews) : null; return g; })
+      .sort(function (a, b) { return (b.avg == null ? -1 : b.avg) - (a.avg == null ? -1 : a.avg); });
+  }
+
+  function typeKey(key) {
+    return key && (data.contentTypes || {})[key] ? key : '';
+  }
+
+  function typeLabel(key) {
+    const t = (data.contentTypes || {})[typeKey(key)];
+    return t ? t.label : 'Uncategorized';
+  }
+
+  /* Integrations */
+
+  const INTEGRATION_INFO = {
+    instagram: {
+      pulls: 'Posts, post times, views, reach, likes, comments, saves, shares, followers and follower demographics.',
+      notConnected: 'Needs access to the account through Meta (Instagram Business/Creator account linked to a Facebook Page, and added to the Insaan Labs Meta app).',
+    },
+    tiktok: { pulls: 'Not available yet.', notConnected: 'TikTok numbers are entered by Insaan Labs for now.' },
+    facebook: { pulls: 'Not available yet.', notConnected: 'Facebook numbers are entered by Insaan Labs for now.' },
+  };
+
+  // Merges a saved Instagram pull into the hand-made data: numbers on known posts are updated
+  // (matched by link), new posts are added to their month, and followers/demographics are replaced.
+  // Titles, content types and notes from the client's data are kept.
+  function applySync(sync) {
+    if (!sync || !sync.posts || !sync.lastSuccessAt) return;
+
+    const byUrl = {};
+    for (const key in data.months) for (const v of data.months[key].videos || []) if (v.url) byUrl[v.url] = v;
+
+    for (const p of sync.posts) {
+      const metrics = { time: p.time, views: p.views, reach: p.reach, likes: p.likes, comments: p.comments, saves: p.saves, shares: p.shares };
+      const existing = byUrl[p.url];
+      if (existing) {
+        for (const k in metrics) if (metrics[k] != null) existing[k] = metrics[k];
+        existing.synced = true;
+      } else {
+        const month = ensureMonth(p.date.slice(0, 7));
+        month.videos.push(Object.assign({
+          date: p.date,
+          platform: sync.platform,
+          type: p.kind === 'Photo' || p.kind === 'Carousel' ? 'photo' : '',
+          title: p.title,
+          url: p.url,
+          synced: true,
+        }, metrics));
+      }
+    }
+
+    if (sync.account && sync.account.followers != null) {
+      const fetchedMonth = new Date(sync.lastSuccessAt).toLocaleDateString('en-CA', { timeZone: 'America/Toronto' }).slice(0, 7);
+      ensureMonth(fetchedMonth).followers[sync.platform] = sync.account.followers;
+    }
+
+    if (sync.demographics && data.platforms && data.platforms[sync.platform]) {
+      data.platforms[sync.platform].demographics = sync.demographics;
+    }
+  }
+
+  function ensureMonth(key) {
+    data.months[key] = data.months[key] || { followers: {}, videos: [], notes: [] };
+    data.months[key].followers = data.months[key].followers || {};
+    data.months[key].videos = data.months[key].videos || [];
+    return data.months[key];
+  }
+
+  function syncStatus(platform) {
+    const s = syncs[platform];
+    if (!s || !s.lastAttemptAt) return { ok: false, label: 'Never refreshed', detail: 'Press Refresh to pull the latest numbers.' };
+    if (!s.ok) return { ok: false, label: 'Last refresh failed ' + timeAgo(s.lastAttemptAt), detail: s.error };
+    const hours = (Date.now() - new Date(s.lastSuccessAt).getTime()) / 3600000;
+    if (hours > SYNC_STALE_HOURS) return { ok: false, label: 'Last refreshed ' + timeAgo(s.lastSuccessAt), detail: 'Out of date: more than ' + SYNC_STALE_HOURS + ' hours old.' };
+    return { ok: true, label: 'Refreshed ' + timeAgo(s.lastSuccessAt), detail: '' };
+  }
+
+  function renderSyncBox() {
+    const box = document.getElementById('sync-box');
+    box.replaceChildren();
+    box.hidden = INTEGRATIONS.length === 0;
+    for (const platform of INTEGRATIONS) {
+      const st = syncStatus(platform);
+      const row = div('sync-row');
+      row.title = st.detail || '';
+      const label = div('sync-label');
+      label.append(div('sync-dot ' + (st.ok ? 'ok' : 'bad')), document.createTextNode(PLATFORMS[platform].label));
+      row.append(label, div('sync-when', st.label));
+      if (isAdmin) {
+        const btn = button('Refresh', 'linkish sync-refresh', function () { refresh(platform, btn); });
+        row.append(btn);
+      }
+      box.append(row);
+    }
+  }
+
+  function renderIntegrations() {
+    const el = document.getElementById('integrations');
+    el.replaceChildren();
+
+    for (const platform of ACTIVE) {
+      const connected = INTEGRATIONS.indexOf(platform) >= 0;
+      const info = INTEGRATION_INFO[platform];
+      const card = div('audience');
+      const top = div('audience-top');
+      const name = div('sync-label big');
+      let st = null;
+      if (connected) {
+        st = syncStatus(platform);
+        name.append(div('sync-dot ' + (st.ok ? 'ok' : 'bad')));
+      } else {
+        name.append(div('sync-dot off'));
+      }
+      name.append(document.createTextNode(PLATFORMS[platform].label), tipIcon(connected ? 'Pulls ' + info.pulls.charAt(0).toLowerCase() + info.pulls.slice(1) : info.notConnected));
+      top.append(name, div('role-tag ' + (connected ? (st.ok ? 'status-live' : 'status-error') : 'status-draft'),
+        connected ? (st.ok ? 'Connected' : 'Needs attention') : 'Not connected'));
+      card.append(top);
+
+      if (connected) {
+        const s = syncs[platform] || {};
+        const when = div('audience-text', st.label);
+        const details = [];
+        if (s.lastSuccessAt) details.push('Last worked ' + formatStamp(s.lastSuccessAt) + '.');
+        if (s.lastAttemptAt && s.lastAttemptAt !== s.lastSuccessAt) details.push('Last attempt ' + formatStamp(s.lastAttemptAt) + '.');
+        if (s.tokenExpiresAt) details.push('Access token expires ' + formatStamp(s.tokenExpiresAt) + '.');
+        if (details.length) when.append(tipIcon(details.join(' ')));
+        card.append(when);
+        if (!st.ok && st.detail) card.append(div('audience-text error-text', st.detail));
+        if (s.insightsAvailable === false) card.append(div('audience-text error-text', 'Views, reach, saves and shares are missing: the token lacks the instagram_manage_insights permission.'));
+        if (s.account) {
+          card.append(div('audience-text muted', '@' + s.account.username + ' · ' + num.format(s.account.followers) + ' followers'));
+        }
+        if (isAdmin) {
+          const actions = div('btn-row');
+          const btn = button('Refresh now', 'cta small', function () { refresh(platform, btn); });
+          actions.append(btn);
+          card.append(actions);
+        }
+      }
+      el.append(card);
+    }
+  }
+
+  async function refresh(platform, btn) {
+    const label = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Refreshing…';
+    try {
+      const { data: result, error } = await window.INSAAN.sb.functions.invoke('refresh-instagram', {
+        body: { client: CLIENT, platform: platform },
+      });
+      let body = result;
+      if (error) {
+        // Non-2xx responses still carry the function's JSON (the error and the saved status).
+        try { body = await error.context.json(); } catch (e) { body = { ok: false, error: error.message }; }
+      }
+      if (body && body.ok) {
+        sessionStorage.setItem('insaan-toast', JSON.stringify({
+          kind: 'success',
+          text: PLATFORMS[platform].label + ' refreshed: ' + plural(body.posts.length, 'post') + ', ' + num.format(body.account.followers) + ' followers.',
+        }));
+        location.reload();
+        return;
+      }
+      if (body && body.lastAttemptAt) syncs[platform] = body;
+      renderSyncBox();
+      renderIntegrations();
+      showToast('Refresh failed. ' + ((body && body.error) || 'Unknown error.'), 'error');
+    } catch (err) {
+      showToast('Refresh failed: couldn\'t reach Supabase. Check your connection and try again.', 'error');
+    }
+    btn.disabled = false;
+    btn.textContent = label;
+  }
+
+  function showToast(text, kind) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toast-text').textContent = text;
+    toast.className = 'toast ' + (kind || 'success');
+    toast.hidden = false;
+    clearTimeout(showToast.timer);
+    if (kind !== 'error') showToast.timer = setTimeout(function () { toast.hidden = true; }, 6000);
+  }
+
+  function timeAgo(iso) {
+    const mins = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+    if (mins < 1) return 'just now';
+    if (mins < 60) return mins + ' min ago';
+    const hours = Math.round(mins / 60);
+    if (hours < 24) return plural(hours, 'hour') + ' ago';
+    return plural(Math.round(hours / 24), 'day') + ' ago';
+  }
+
+  function formatStamp(iso) {
+    return new Date(iso).toLocaleString('en-US', { timeZone: 'America/Toronto', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
+  }
+
+  /* Posting times */
+
+  function setUpHeatmap() {
+    const buttons = document.querySelectorAll('#view-times .segmented button');
+    for (const b of buttons) {
+      b.addEventListener('click', function () {
+        for (const other of buttons) other.setAttribute('aria-pressed', String(other === b));
+        renderHeatmap(b.dataset.mode);
+      });
+    }
+    renderHeatmap('posts');
+  }
+
+  function blockRange(i) {
+    return BLOCKS[i] + '–' + BLOCKS[(i + 1) % BLOCKS.length];
+  }
+
+  // Posts grouped by weekday (Mon = 0) and 3-hour block of the day, using Toronto times from the data.
+  function timeSlots() {
+    const timed = allVideos().filter(function (v) { return v.time; });
+    const slots = [];
+    for (let d = 0; d < 7; d++) {
+      slots.push([]);
+      for (let b = 0; b < BLOCKS.length; b++) slots[d].push([]);
+    }
+    for (const v of timed) {
+      const day = (parseDate(v.date).getDay() + 6) % 7;
+      const block = Math.floor(Number(v.time.split(':')[0]) / 3);
+      slots[day][block].push(v);
+    }
+    return { slots: slots, timed: timed };
+  }
+
+  function slotViews(posts) {
+    return median(posts.filter(function (v) { return v.views != null; }).map(function (v) { return v.views; }));
+  }
+
+  function renderHeatmap(mode) {
+    const { slots, timed } = timeSlots();
+    const total = allVideos().length;
+    const el = document.getElementById('heatmap');
+    el.replaceChildren();
+
+    setTip('times-lede', timed.length
+      ? 'When your ' + plural(timed.length, 'post') + ' went up, by day of the week and time of day (Toronto time).' +
+        (timed.length < total ? ' ' + plural(total - timed.length, 'post') + ' without a recorded time ' + (total - timed.length === 1 ? 'isn\'t' : 'aren\'t') + ' shown.' : '')
+      : 'When your posts go up, by day of the week and time of day.');
+    setTip('heatmap-legend', mode === 'posts'
+      ? 'Each square is a 3-hour block. The number is how many posts went up then; darker means more. Hover a square to see the posts.'
+      : 'Each square is a 3-hour block. The number is the typical (median) views of posts from that slot. Squares are shaded by rank, best slot darkest, so one viral post doesn\'t wash out the rest.');
+
+    if (timed.length === 0) {
+      el.append(div('empty', 'No posts with a time logged yet.'));
+      renderFindings(slots, timed);
+      return;
+    }
+
+    const value = function (posts) { return mode === 'posts' ? posts.length : slotViews(posts); };
+    const values = [];
+    for (const row of slots) for (const posts of row) if (posts.length && value(posts) != null) values.push(value(posts));
+    const max = Math.max.apply(null, values);
+    // One viral post can be 100x the rest, which washes out even a log scale, so views are
+    // shaded by rank: best slot darkest, worst lightest.
+    const ranked = values.slice().sort(function (a, b) { return a - b; });
+    const shade = function (v) {
+      if (mode === 'posts') return max ? v / max : 0;
+      return ranked.length > 1 ? ranked.indexOf(v) / (ranked.length - 1) : 1;
+    };
+
+    const grid = div('heatmap');
+    grid.append(div('hm-corner'));
+    for (const label of BLOCKS) grid.append(div('hm-col', label));
+
+    slots.forEach(function (row, d) {
+      grid.append(div('hm-row', DAYS_LONG[d].slice(0, 3)));
+      row.forEach(function (posts, b) {
+        const cell = div('hm-cell');
+        const v = posts.length ? value(posts) : null;
+        if (v != null) {
+          const t = 0.15 + 0.85 * shade(v);
+          cell.style.background = 'rgba(47, 74, 61, ' + t.toFixed(2) + ')';
+          if (t > 0.55) cell.classList.add('dark');
+          cell.textContent = mode === 'posts' ? String(v) : compact2.format(v);
+          cell.title = DAYS_LONG[d] + ', ' + blockRange(b) + '\n' + posts.map(function (p) {
+            return '• ' + p.title + ' (' + formatTime(p.time) + (p.views != null ? ', ' + num.format(p.views) + ' views' : '') + ')';
+          }).join('\n');
+        } else {
+          cell.title = DAYS_LONG[d] + ', ' + blockRange(b) + ': no posts';
+        }
+        grid.append(cell);
+      });
+    });
+
+    el.append(grid);
+    renderFindings(slots, timed);
+  }
+
+  function renderFindings(slots, timed) {
+    const list = document.getElementById('time-findings');
+    list.replaceChildren();
+    const add = function (text) {
+      const li = document.createElement('li');
+      li.textContent = text;
+      list.append(li);
+    };
+
+    if (timed.length === 0) {
+      add('Nothing to analyse yet.');
+      return;
+    }
+
+    const byDay = slots.map(function (row) { return row.reduce(function (n, posts) { return n + posts.length; }, 0); });
+    const topDay = byDay.indexOf(Math.max.apply(null, byDay));
+    const daysUsed = byDay.filter(Boolean).length;
+    add(daysUsed === 1
+      ? 'Every post went up on a ' + DAYS_LONG[topDay] + '.'
+      : 'You post on ' + daysUsed + ' different days of the week. ' + DAYS_LONG[topDay] + ' is the most common (' + plural(byDay[topDay], 'post') + ').');
+
+    const byBlock = BLOCKS.map(function (_, b) { return slots.reduce(function (n, row) { return n + row[b].length; }, 0); });
+    const topBlock = byBlock.indexOf(Math.max.apply(null, byBlock));
+    const daytime = byBlock.slice(3, 6).reduce(function (a, b) { return a + b; }, 0);
+    add('The most common time is ' + blockRange(topBlock) + ' (' + plural(byBlock[topBlock], 'post') + '). ' +
+      daytime + ' of ' + timed.length + ' went up between 9am and 6pm.');
+
+    let best = null;
+    slots.forEach(function (row, d) {
+      row.forEach(function (posts, b) {
+        const v = slotViews(posts);
+        if (v != null && (!best || v > best.views)) best = { day: d, block: b, views: v, posts: posts.length };
+      });
+    });
+    if (best) {
+      add('The best-performing slot is ' + DAYS_LONG[best.day] + ', ' + blockRange(best.block) + ', with ' +
+        num.format(best.views) + ' typical views from ' + plural(best.posts, 'post') + '.' +
+        (best.posts === 1 ? ' That\'s a single post, so it may say more about that post than the time.' : ''));
+    }
+
+    setTip('findings-note', timed.length < 20
+      ? 'Based on ' + plural(timed.length, 'post') + ', so treat these as hints rather than rules. Patterns become reliable after a few months of regular posting.'
+      : 'Based on ' + plural(timed.length, 'post') + ' with a recorded time.');
+  }
+
+  /* Brand deck */
+
+  function renderBrand() {
+    const link = document.getElementById('deck-link');
+    if (data.brand.deckUrl) {
+      link.href = data.brand.deckUrl;
+      link.hidden = false;
+    }
+    showSlide(0);
+  }
+
+  function showSlide(index) {
+    const slides = data.brand.slides;
+    if (index < 0 || index >= slides.length) return;
+    currentSlide = index;
+
+    const s = slides[index];
+    const el = document.getElementById('slide');
+    el.replaceChildren();
+
+    if (s.kicker) el.append(div('slide-kicker', s.kicker));
+    const title = document.createElement('h2');
+    title.className = 'slide-title';
+    title.textContent = s.title;
+    el.append(title);
+    if (s.subtitle) el.append(div('slide-subtitle', s.subtitle));
+    if (s.body) el.append(div('slide-body', s.body));
+
+    if (s.bullets) {
+      const ul = document.createElement('ul');
+      ul.className = 'slide-bullets';
+      for (const b of s.bullets) {
+        const li = document.createElement('li');
+        li.textContent = b;
+        ul.append(li);
+      }
+      el.append(ul);
+    }
+
+    if (s.swatches) {
+      const grid = div('swatches');
+      for (const sw of s.swatches) {
+        const item = div('swatch');
+        const color = div('swatch-color');
+        color.style.background = sw.hex;
+        item.append(color, div('swatch-name', sw.name), div('swatch-hex', sw.hex));
+        grid.append(item);
+      }
+      el.append(grid);
+    }
+
+    document.getElementById('slide-count').textContent = pad(index + 1) + ' / ' + pad(slides.length);
+    document.getElementById('prev-slide').disabled = index === 0;
+    document.getElementById('next-slide').disabled = index === slides.length - 1;
+  }
+
+  /* Competitors */
+
+  function renderCompetitors() {
+    const c = data.competitors;
+    const latestKey = monthKeys[monthKeys.length - 1];
+    const latest = data.months[latestKey];
+
+    const you = Object.assign({
+      name: data.business.name,
+      neighbourhood: data.business.neighbourhood,
+      followers: latest.followers || {},
+      postsPerMonth: (latest.videos || []).length,
+      strength: '',
+      isYou: true,
+    }, c.you);
+
+    const rows = c.cafes.concat([you]).sort(function (a, b) { return totalFollowers(b) - totalFollowers(a); });
+
+    setTip('competitors-lede',
+      'How you compare with similar businesses, sorted by total followers. Their numbers are from ' + formatDate(c.updated) +
+      '; yours are from ' + monthLabel(latestKey, 'long') + '.');
+
+    const head = document.getElementById('competitors-head');
+    head.replaceChildren();
+    const columns = [['Cafe']]
+      .concat(ACTIVE.map(function (id) { return [PLATFORMS[id].label, 'num']; }))
+      .concat([['Posts / mo', 'num'], ['Signature'], ['What they do well']]);
+    for (const [label, cls] of columns) {
+      const th = document.createElement('th');
+      th.scope = 'col';
+      th.textContent = label;
+      if (cls) th.className = cls;
+      head.append(th);
+    }
+
+    const body = document.getElementById('competitors-body');
+    body.replaceChildren();
+
+    for (const r of rows) {
+      const tr = document.createElement('tr');
+      if (r.isYou) tr.className = 'you';
+
+      const name = document.createElement('td');
+      const nameLine = div('cafe-name', r.name);
+      if (r.isYou) {
+        const tag = document.createElement('span');
+        tag.className = 'you-tag';
+        tag.textContent = 'You';
+        nameLine.append(tag);
+      }
+      name.append(nameLine, div('cafe-area', r.neighbourhood || ''));
+      tr.append(name);
+
+      for (const id of ACTIVE) tr.append(cell(r.followers[id] == null ? '—' : num.format(r.followers[id]), 'num'));
+      tr.append(cell(r.postsPerMonth == null ? '—' : String(r.postsPerMonth), 'num'));
+      tr.append(cell((r.signature || '—') + (r.price != null ? ' · ' + price.format(r.price) : '')));
+      tr.append(cell(r.strength || '—', 'muted'));
+      body.append(tr);
+    }
+
+    renderNotes(document.getElementById('competitor-notes'), c.notes || [], 'No notes yet.');
+  }
+
+  function totalFollowers(r) {
+    return ACTIVE.reduce(function (sum, id) { return sum + (r.followers[id] || 0); }, 0);
+  }
+
+  /* Shared */
+
+  function renderNotes(el, notes, emptyText) {
+    el.replaceChildren();
+
+    if (notes.length === 0) {
+      el.append(div('empty', emptyText));
+      return;
+    }
+
+    for (const note of notes) {
+      const card = document.createElement('article');
+      card.className = 'note';
+      card.append(div('note-meta', note.author + ' · ' + formatDate(note.date)));
+      for (const para of note.text.split(/\n\s*\n/)) {
+        const p = document.createElement('p');
+        p.textContent = para.trim();
+        card.append(p);
+      }
+      el.append(card);
+    }
+  }
+
+  // Puts explanatory text behind a "?" icon. Accepts the icon element or its id.
+  function setTip(target, text) {
+    const el = typeof target === 'string' ? document.getElementById(target) : target;
+    if (!el) return;
+    el.dataset.tip = text;
+    el.setAttribute('aria-label', text);
+    el.hidden = !text;
+  }
+
+  function tipIcon(text) {
+    const el = document.createElement('button');
+    el.type = 'button';
+    el.className = 'info';
+    el.textContent = '?';
+    setTip(el, text);
+    return el;
+  }
+
+  function statCard(label, value, tip) {
+    const card = div('stat');
+    const l = div('stat-label', label);
+    if (tip) l.append(tipIcon(tip));
+    card.append(l, div('stat-value', value));
+    return card;
+  }
+
+  function div(className, text) {
+    const el = document.createElement('div');
+    el.className = className;
+    if (text != null) el.textContent = text;
+    return el;
+  }
+
+  function cell(text, className) {
+    const td = document.createElement('td');
+    if (className) td.className = className;
+    td.textContent = text;
+    return td;
+  }
+
+  function pad(n) {
+    return String(n).padStart(2, '0');
+  }
+
+  function parseDate(ymd) {
+    const [y, m, d] = ymd.split('-').map(Number);
+    return new Date(y, m - 1, d || 1);
+  }
+
+  function formatDate(ymd) {
+    return parseDate(ymd).toLocaleDateString('en-CA', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  function postedAt(v) {
+    return formatDate(v.date) + (v.time ? ' · ' + formatTime(v.time) : '');
+  }
+
+  function formatTime(hhmm) {
+    const [h, m] = hhmm.split(':').map(Number);
+    return new Date(2000, 0, 1, h, m).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  }
+
+  function monthLabel(key, style) {
+    return parseDate(key).toLocaleDateString('en-CA', style === 'long'
+      ? { month: 'long', year: 'numeric' }
+      : { month: 'short' });
+  }
+</script>
+</body>
+</html>

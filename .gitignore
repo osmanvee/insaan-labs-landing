@@ -1,0 +1,5 @@
+# Old local-only data. It now lives in Supabase and must never be published.
+app/sync/
+app/clients.js
+app/data.js
+app/data-*.js

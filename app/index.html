@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Log in · Insaan Labs</title>
+<link rel="stylesheet" href="app.css?v=8">
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a class="mark" href="../index.html">INSAAN<span>·</span>LABS</a>
+    </header>
+
+    <main>
+      <h1>Log in <button class="info" type="button" id="login-tip" data-tip="We'll email you a link that signs you in. No password needed." aria-label="We'll email you a link that signs you in. No password needed.">?</button></h1>
+
+      <form id="login-form">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+        <button class="cta" type="submit">Send login link</button>
+      </form>
+      <p class="status" id="status" role="status"></p>
+    </main>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="client.js"></script>
+<script>
+  (async function () {
+    const { sb } = window.INSAAN;
+    const contact = window.INSAAN_CONFIG.CONTACT_EMAIL;
+    const form = document.getElementById('login-form');
+    const status = document.getElementById('status');
+    const button = form.querySelector('button');
+
+    function setStatus(text, isError) {
+      status.textContent = text;
+      status.classList.toggle('error', !!isError);
+    }
+
+    if (new URLSearchParams(location.search).get('link') === 'expired') {
+      setStatus('That login link has expired or was already used. Request a new one below.', true);
+    }
+
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) return location.replace('account.html');
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const email = form.email.value.trim().toLowerCase();
+      button.disabled = true;
+      setStatus('Sending…');
+
+      const { error } = await sb.auth.signInWithOtp({
+        email,
+        options: {
+          shouldCreateUser: false,
+          emailRedirectTo: new URL('account.html', location.href).href,
+        },
+      });
+
+      button.disabled = false;
+      if (error) {
+        setStatus("We couldn't send a link to that address. If you're a pilot client, email " + contact + '.', true);
+      } else {
+        setStatus('Check your inbox for a login link from Insaan Labs.');
+        form.reset();
+      }
+    });
+  })();
+</script>
+</body>
+</html>

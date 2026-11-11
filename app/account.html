@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Dashboards · Insaan Labs</title>
+<link rel="stylesheet" href="app.css?v=8">
+</head>
+<body>
+  <div class="wrap wide">
+    <header>
+      <a class="mark" href="../index.html">INSAAN<span>·</span>LABS</a>
+      <div class="header-account">
+        <span id="account-name"></span>
+        <button class="linkish" id="sign-out" type="button">Sign out</button>
+      </div>
+    </header>
+
+    <main id="main" hidden>
+      <h1 id="greeting">Dashboards</h1>
+      <p class="lede" id="lede" hidden></p>
+
+      <div class="dashboard-cards" id="dashboards"></div>
+    </main>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="client.js"></script>
+<script>
+  (async function () {
+    const I = window.INSAAN;
+    const contact = window.INSAAN_CONFIG.CONTACT_EMAIL;
+    const num = new Intl.NumberFormat('en-CA');
+    const PLATFORM_LABELS = { instagram: 'Instagram', tiktok: 'TikTok', facebook: 'Facebook' };
+
+    document.getElementById('sign-out').addEventListener('click', async function () {
+      await I.signOut();
+      location.replace('index.html');
+    });
+
+    if (location.hash.includes('error=')) return location.replace('index.html?link=expired');
+    const user = await I.currentUser();
+    if (!user) return location.replace('index.html');
+
+    const main = document.getElementById('main');
+    const lede = document.getElementById('lede');
+    const showMessage = function (text) {
+      lede.hidden = false;
+      lede.textContent = text;
+      main.hidden = false;
+    };
+
+    if (!user.account) return showMessage(user.email + ' isn\'t linked to any dashboards. Email ' + contact + ' to set it up.');
+
+    document.getElementById('account-name').textContent = user.account.name;
+    document.title = 'Dashboards · ' + user.account.name + ' · Insaan Labs';
+
+    // Row-level security only returns the dashboards this account is a member of.
+    const [{ data: clients, error }, { data: syncs }] = await Promise.all([
+      I.sb.from('clients').select('id, name, data').order('name'),
+      I.sb.from('syncs').select('client_id, platform, record'),
+    ]);
+    if (error) return showMessage('Couldn\'t load your dashboards. Try refreshing the page.');
+    if (!clients.length) return showMessage('No dashboards yet.');
+
+    if (clients.length === 1 && !user.account.isAdmin) {
+      return location.replace('dashboard.html?client=' + encodeURIComponent(clients[0].id));
+    }
+
+    main.hidden = false;
+    const list = document.getElementById('dashboards');
+    for (const c of clients) {
+      const card = document.createElement('a');
+      card.className = 'dashboard-card';
+      card.href = 'dashboard.html?client=' + encodeURIComponent(c.id);
+
+      const name = document.createElement('div');
+      name.className = 'dashboard-card-name';
+      name.textContent = c.name;
+      const meta = document.createElement('div');
+      meta.className = 'dashboard-card-meta';
+      meta.textContent = summarize(c.data || {}, (syncs || []).filter(function (s) { return s.client_id === c.id; }));
+      card.append(name, meta);
+      list.append(card);
+    }
+
+    function summarize(data, clientSyncs) {
+      const months = data.months || {};
+      const keys = Object.keys(months).sort();
+      const platforms = Object.keys(data.platforms || PLATFORM_LABELS);
+      const latest = {};
+      const urls = new Set();
+      for (const k of keys) {
+        for (const id of platforms) if ((months[k].followers || {})[id] != null) latest[id] = months[k].followers[id];
+        for (const v of months[k].videos || []) urls.add(v.url || k + v.title);
+      }
+      for (const s of clientSyncs) {
+        const r = s.record || {};
+        if (r.lastSuccessAt && r.account) latest[s.platform] = r.account.followers;
+        for (const p of r.posts || []) urls.add(p.url);
+      }
+      const known = Object.keys(latest);
+      const followers = known.reduce(function (sum, id) { return sum + latest[id]; }, 0);
+      return [
+        platforms.map(function (id) { return PLATFORM_LABELS[id] || id; }).join(', '),
+        (known.length ? num.format(followers) : '—') + ' followers',
+        urls.size + (urls.size === 1 ? ' post' : ' posts'),
+      ].join(' · ');
+    }
+  })();
+</script>
+</body>
+</html>

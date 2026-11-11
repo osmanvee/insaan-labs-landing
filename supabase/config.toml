@@ -1,0 +1,6 @@
+# Supabase CLI settings for this repo. Project: luzjfxflufhsiwvqeelc
+project_id = "insaan-labs"
+
+[functions.refresh-instagram]
+# The function checks the user's session itself (and works with the new publishable/secret keys).
+verify_jwt = false
